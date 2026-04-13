@@ -1,0 +1,650 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		61B54BAB2F8846D1006907B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BAA2F8846D1006907B6 /* AppDelegate.swift */; };
+		61B54BAF2F8846D1006907B6 /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BAD2F8846D1006907B6 /* Main.html */; };
+		61B54BB12F8846D1006907B6 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB02F8846D1006907B6 /* Icon.png */; };
+		61B54BB32F8846D1006907B6 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB22F8846D1006907B6 /* Style.css */; };
+		61B54BB52F8846D1006907B6 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB42F8846D1006907B6 /* Script.js */; };
+		61B54BB72F8846D1006907B6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BB62F8846D1006907B6 /* ViewController.swift */; };
+		61B54BBA2F8846D1006907B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB82F8846D1006907B6 /* Main.storyboard */; };
+		61B54BBC2F8846D2006907B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BBB2F8846D2006907B6 /* Assets.xcassets */; };
+		61B54BC32F8846D2006907B6 /* Apple Music Lover Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		61B54BC82F8846D2006907B6 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */; };
+		61B54BDA2F8846D2006907B6 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD42F8846D2006907B6 /* background */; };
+		61B54BDB2F8846D2006907B6 /* popup in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD52F8846D2006907B6 /* popup */; };
+		61B54BDC2F8846D2006907B6 /* content in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD62F8846D2006907B6 /* content */; };
+		61B54BDD2F8846D2006907B6 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD72F8846D2006907B6 /* manifest.json */; };
+		61B54BDE2F8846D2006907B6 /* lib in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD82F8846D2006907B6 /* lib */; };
+		61B54BDF2F8846D2006907B6 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD92F8846D2006907B6 /* assets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		61B54BC42F8846D2006907B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61B54B9F2F8846D1006907B6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 61B54BC12F8846D2006907B6;
+			remoteInfo = "Apple Music Lover Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		61B54BCF2F8846D2006907B6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				61B54BC32F8846D2006907B6 /* Apple Music Lover Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		61B54BA72F8846D1006907B6 /* Apple Music Lover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Apple Music Lover.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BAA2F8846D1006907B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		61B54BAE2F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		61B54BB02F8846D1006907B6 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		61B54BB22F8846D1006907B6 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		61B54BB42F8846D1006907B6 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		61B54BB62F8846D1006907B6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		61B54BB92F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		61B54BBB2F8846D2006907B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		61B54BBD2F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Apple Music Lover Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		61B54BC92F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		61B54BD42F8846D2006907B6 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../extension/background; sourceTree = "<group>"; };
+		61B54BD52F8846D2006907B6 /* popup */ = {isa = PBXFileReference; lastKnownFileType = folder; name = popup; path = ../../../extension/popup; sourceTree = "<group>"; };
+		61B54BD62F8846D2006907B6 /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; name = content; path = ../../../extension/content; sourceTree = "<group>"; };
+		61B54BD72F8846D2006907B6 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../extension/manifest.json; sourceTree = "<group>"; };
+		61B54BD82F8846D2006907B6 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../extension/lib; sourceTree = "<group>"; };
+		61B54BD92F8846D2006907B6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../extension/assets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		61F1B4422F8857CE00C2EE1B /* Exceptions for "dist" folder in "Apple Music Lover Extension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"content-script.js",
+				popup.js,
+				"service-worker.js",
+			);
+			target = 61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		61F1B43E2F8851E600C2EE1B /* dist */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				61F1B4422F8857CE00C2EE1B /* Exceptions for "dist" folder in "Apple Music Lover Extension" target */,
+			);
+			path = dist;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		61B54BA42F8846D1006907B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61B54BBF2F8846D2006907B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		61B54B9E2F8846D1006907B6 = {
+			isa = PBXGroup;
+			children = (
+				61B54BA92F8846D1006907B6 /* Apple Music Lover */,
+				61B54BC62F8846D2006907B6 /* Apple Music Lover Extension */,
+				61B54BA82F8846D1006907B6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		61B54BA82F8846D1006907B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61B54BA72F8846D1006907B6 /* Apple Music Lover.app */,
+				61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		61B54BA92F8846D1006907B6 /* Apple Music Lover */ = {
+			isa = PBXGroup;
+			children = (
+				61B54BAA2F8846D1006907B6 /* AppDelegate.swift */,
+				61B54BB62F8846D1006907B6 /* ViewController.swift */,
+				61B54BB82F8846D1006907B6 /* Main.storyboard */,
+				61B54BBB2F8846D2006907B6 /* Assets.xcassets */,
+				61B54BBD2F8846D2006907B6 /* Info.plist */,
+				61B54BAC2F8846D1006907B6 /* Resources */,
+			);
+			path = "Apple Music Lover";
+			sourceTree = "<group>";
+		};
+		61B54BAC2F8846D1006907B6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				61B54BAD2F8846D1006907B6 /* Main.html */,
+				61B54BB02F8846D1006907B6 /* Icon.png */,
+				61B54BB22F8846D1006907B6 /* Style.css */,
+				61B54BB42F8846D1006907B6 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		61B54BC62F8846D2006907B6 /* Apple Music Lover Extension */ = {
+			isa = PBXGroup;
+			children = (
+				61F1B43E2F8851E600C2EE1B /* dist */,
+				61B54BD32F8846D2006907B6 /* Resources */,
+				61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */,
+				61B54BC92F8846D2006907B6 /* Info.plist */,
+			);
+			path = "Apple Music Lover Extension";
+			sourceTree = "<group>";
+		};
+		61B54BD32F8846D2006907B6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				61B54BD42F8846D2006907B6 /* background */,
+				61B54BD52F8846D2006907B6 /* popup */,
+				61B54BD62F8846D2006907B6 /* content */,
+				61B54BD72F8846D2006907B6 /* manifest.json */,
+				61B54BD82F8846D2006907B6 /* lib */,
+				61B54BD92F8846D2006907B6 /* assets */,
+			);
+			name = Resources;
+			path = "Apple Music Lover Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		61B54BA62F8846D1006907B6 /* Apple Music Lover */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover" */;
+			buildPhases = (
+				61B54BA32F8846D1006907B6 /* Sources */,
+				61B54BA42F8846D1006907B6 /* Frameworks */,
+				61B54BA52F8846D1006907B6 /* Resources */,
+				61B54BCF2F8846D2006907B6 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				61B54BC52F8846D2006907B6 /* PBXTargetDependency */,
+			);
+			name = "Apple Music Lover";
+			packageProductDependencies = (
+			);
+			productName = "Apple Music Lover";
+			productReference = 61B54BA72F8846D1006907B6 /* Apple Music Lover.app */;
+			productType = "com.apple.product-type.application";
+		};
+		61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover Extension" */;
+			buildPhases = (
+				61B54BBE2F8846D2006907B6 /* Sources */,
+				61B54BBF2F8846D2006907B6 /* Frameworks */,
+				61B54BC02F8846D2006907B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				61F1B43E2F8851E600C2EE1B /* dist */,
+			);
+			name = "Apple Music Lover Extension";
+			packageProductDependencies = (
+			);
+			productName = "Apple Music Lover Extension";
+			productReference = 61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		61B54B9F2F8846D1006907B6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					61B54BA62F8846D1006907B6 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+					61B54BC12F8846D2006907B6 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+				};
+			};
+			buildConfigurationList = 61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Apple Music Lover" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 61B54B9E2F8846D1006907B6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 61B54BA82F8846D1006907B6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				61B54BA62F8846D1006907B6 /* Apple Music Lover */,
+				61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		61B54BA52F8846D1006907B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61B54BB12F8846D1006907B6 /* Icon.png in Resources */,
+				61B54BBA2F8846D1006907B6 /* Main.storyboard in Resources */,
+				61B54BB52F8846D1006907B6 /* Script.js in Resources */,
+				61B54BAF2F8846D1006907B6 /* Main.html in Resources */,
+				61B54BBC2F8846D2006907B6 /* Assets.xcassets in Resources */,
+				61B54BB32F8846D1006907B6 /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61B54BC02F8846D2006907B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61B54BDD2F8846D2006907B6 /* manifest.json in Resources */,
+				61B54BDE2F8846D2006907B6 /* lib in Resources */,
+				61B54BDC2F8846D2006907B6 /* content in Resources */,
+				61B54BDF2F8846D2006907B6 /* assets in Resources */,
+				61B54BDA2F8846D2006907B6 /* background in Resources */,
+				61B54BDB2F8846D2006907B6 /* popup in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61B54BA32F8846D1006907B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61B54BB72F8846D1006907B6 /* ViewController.swift in Sources */,
+				61B54BAB2F8846D1006907B6 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		61B54BBE2F8846D2006907B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61B54BC82F8846D2006907B6 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		61B54BC52F8846D2006907B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */;
+			targetProxy = 61B54BC42F8846D2006907B6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		61B54BAD2F8846D1006907B6 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61B54BAE2F8846D1006907B6 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		61B54BB82F8846D1006907B6 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				61B54BB92F8846D1006907B6 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		61B54BCA2F8846D2006907B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		61B54BCB2F8846D2006907B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		61B54BCD2F8846D2006907B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9MQU6VD26K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Apple Music Lover Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		61B54BCE2F8846D2006907B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9MQU6VD26K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Apple Music Lover Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover.extension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		61B54BD12F8846D2006907B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9MQU6VD26K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Apple Music Lover/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Facet Build, LLC";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover;
+				PRODUCT_NAME = "Facet Build, LLC";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		61B54BD22F8846D2006907B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9MQU6VD26K;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Apple Music Lover/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Facet Build, LLC";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover;
+				PRODUCT_NAME = "Facet Build, LLC";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Apple Music Lover" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61B54BCA2F8846D2006907B6 /* Debug */,
+				61B54BCB2F8846D2006907B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61B54BCD2F8846D2006907B6 /* Debug */,
+				61B54BCE2F8846D2006907B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				61B54BD12F8846D2006907B6 /* Debug */,
+				61B54BD22F8846D2006907B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 61B54B9F2F8846D1006907B6 /* Project object */;
+}

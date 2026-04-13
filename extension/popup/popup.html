@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Music Lover</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <section id="disclosureScreen">
+    <h2>Before you start</h2>
+    <p>To match tempo, genre, and era, this extension looks up each track's metadata using its ISRC code.</p>
+    <p><strong>Third-party requests made on every track play:</strong></p>
+    <ul>
+      <li><strong>Deezer</strong> — BPM, genre, and artist radio data</li>
+    </ul>
+    <p>Deezer receives the ISRCs of tracks you listen to, which means it can infer your listening history.</p>
+    <p class="disclosure-clean">Your Apple Music credentials never leave your device. All preference data is stored locally.</p>
+    <button id="disclosureConfirmBtn">Got it — enable the extension</button>
+  </section>
+
+  <div id="mainContent" style="display:none">
+  <header>
+    <h1>Apple Music Lover</h1>
+    <label class="toggle">
+      <input type="checkbox" id="enabledToggle" checked>
+      <span class="toggle-label">Active</span>
+    </label>
+  </header>
+
+  <!-- What the extension is actively using for recommendations -->
+  <section class="vibe" id="vibeSection">
+    <h2>Recommending to match</h2>
+    <div class="vibe-stats">
+      <div class="stat">
+        <span class="stat-label">BPM</span>
+        <span class="stat-value" id="bpmValue">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Genre</span>
+        <span class="stat-value" id="genreValue">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Era</span>
+        <span class="stat-value" id="eraValue">—</span>
+      </div>
+    </div>
+    <span class="hint" id="vibeHint">Detected from your recent tracks.</span>
+  </section>
+
+  <!-- Controls -->
+  <section class="overrides">
+    <h2>Controls</h2>
+
+    <div class="control">
+      <label>Tempo</label>
+      <div class="button-row">
+        <button id="slowerBtn">Slower</button>
+        <button id="resetTempoBtn" class="secondary">Auto</button>
+        <button id="fasterBtn">Faster</button>
+      </div>
+      <span class="hint" id="tempoHint"></span>
+    </div>
+
+    <div class="control">
+      <label>Era <span class="hint-inline" id="eraAutoHint">— following detected</span></label>
+      <div class="button-row">
+        <button id="eraBackBtn">◀</button>
+        <span class="era-display" id="eraDisplay">Auto</span>
+        <button id="eraForwardBtn">▶</button>
+      </div>
+      <span class="hint" id="eraHint"></span>
+    </div>
+
+    <div class="control">
+      <label>Genre <span class="hint-inline" id="genreAutoHint">— following detected</span></label>
+      <select id="genreSelect">
+        <option value="">Auto</option>
+        <optgroup label="Electronic">
+          <option value="Electronic">Electronic</option>
+          <option value="Dance">Dance</option>
+          <option value="House">House</option>
+          <option value="Techno">Techno</option>
+          <option value="Disco">Disco</option>
+        </optgroup>
+        <optgroup label="Pop &amp; Hip-Hop">
+          <option value="Pop">Pop</option>
+          <option value="K-Pop">K-Pop</option>
+          <option value="Hip-Hop/Rap">Hip-Hop / Rap</option>
+          <option value="R&B/Soul">R&amp;B / Soul</option>
+          <option value="Funk">Funk</option>
+        </optgroup>
+        <optgroup label="Rock &amp; Alternative">
+          <option value="Rock">Rock</option>
+          <option value="Metal">Metal</option>
+          <option value="Alternative">Alternative</option>
+          <option value="Indie">Indie</option>
+        </optgroup>
+        <optgroup label="Folk &amp; Acoustic">
+          <option value="Country">Country</option>
+          <option value="Folk">Folk</option>
+          <option value="Singer/Songwriter">Singer / Songwriter</option>
+          <option value="Blues">Blues</option>
+        </optgroup>
+        <optgroup label="Other">
+          <option value="Jazz">Jazz</option>
+          <option value="Classical">Classical</option>
+          <option value="Reggae">Reggae</option>
+          <option value="Latin">Latin</option>
+        </optgroup>
+      </select>
+    </div>
+
+  </section>
+
+  <section class="next-up" id="nextUpSection">
+    <h2>Up Next</h2>
+    <ol id="upNextList" class="up-next-list"></ol>
+    <span class="hint" id="seedHint"></span>
+  </section>
+
+  <footer class="debug-footer">
+    <label class="debug-toggle-label">
+      <input type="checkbox" id="debugToggle">
+      Debug logging
+    </label>
+  </footer>
+
+  </div><!-- #mainContent -->
+
+  <script src="popup.bundle.js"></script>
+</body>
+</html>

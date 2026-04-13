@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Apple Music Lover",
+  "version": "0.1.0",
+  "description": "Metadata-driven autoplay for Apple Music. Matches tempo, genre, and era — not popularity.",
+
+  "permissions": [
+    "storage"
+  ],
+
+  "host_permissions": [
+    "https://music.apple.com/*",
+    "https://api.music.apple.com/*",
+    "https://api.deezer.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background/service-worker.bundle.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://music.apple.com/*"],
+      "js": ["content/page-bridge.bundle.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://music.apple.com/*"],
+      "js": ["content/content-script.bundle.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "32": "assets/icons/icon-32.png",
+      "64": "assets/icons/icon-64.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["content/page-bridge.js"],
+      "matches": ["https://music.apple.com/*"]
+    }
+  ],
+
+  "icons": {
+    "32": "assets/icons/icon-32.png",
+    "64": "assets/icons/icon-64.png",
+    "128": "assets/icons/icon-128.png"
+  }
+}

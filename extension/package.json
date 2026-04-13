@@ -1,0 +1,12 @@
+{
+  "name": "apple-music-lover",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  }
+}

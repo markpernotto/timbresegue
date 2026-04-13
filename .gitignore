@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Claude Code session memory — internal tooling, not part of the project
+memory/
+
+# POC / exploration scripts — validated during development, not part of the extension
+poc/
+
+# Node
+node_modules/
+extension/node_modules/
+
+# Build output
+extension/dist/
+extension/content/*.bundle.js
+extension/popup/*.bundle.js
+extension/background/*.bundle.js
+
+# Xcode
+xcode/*.xcuserdatad
+xcode/**/*.xcuserdatad
+xcode/**/.DS_Store
+xcode/Apple Music Lover/Apple Music Lover.xcodeproj/xcuserdata/
+
+# Environment / secrets (POC scripts use these via env vars — never commit values)
+.env
+.env.*
