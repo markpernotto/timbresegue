@@ -63,12 +63,12 @@
 		61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Apple Music Lover Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		61B54BC92F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61B54BD42F8846D2006907B6 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../extension/background; sourceTree = "<group>"; };
-		61B54BD52F8846D2006907B6 /* popup */ = {isa = PBXFileReference; lastKnownFileType = folder; name = popup; path = ../../../extension/popup; sourceTree = "<group>"; };
-		61B54BD62F8846D2006907B6 /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; name = content; path = ../../../extension/content; sourceTree = "<group>"; };
-		61B54BD72F8846D2006907B6 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../../extension/manifest.json; sourceTree = "<group>"; };
-		61B54BD82F8846D2006907B6 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../extension/lib; sourceTree = "<group>"; };
-		61B54BD92F8846D2006907B6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../extension/assets; sourceTree = "<group>"; };
+		61B54BD42F8846D2006907B6 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../extension/background; sourceTree = "<group>"; };
+		61B54BD52F8846D2006907B6 /* popup */ = {isa = PBXFileReference; lastKnownFileType = folder; name = popup; path = ../../extension/popup; sourceTree = "<group>"; };
+		61B54BD62F8846D2006907B6 /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; name = content; path = ../../extension/content; sourceTree = "<group>"; };
+		61B54BD72F8846D2006907B6 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../extension/manifest.json; sourceTree = "<group>"; };
+		61B54BD82F8846D2006907B6 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../extension/lib; sourceTree = "<group>"; };
+		61B54BD92F8846D2006907B6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../extension/assets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -88,7 +88,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\ncd \"$SRCROOT/../../../extension\" && npm run build\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\ncd \"$SRCROOT/../../extension\" && npm run build\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
