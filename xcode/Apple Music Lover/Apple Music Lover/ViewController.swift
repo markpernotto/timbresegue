@@ -9,7 +9,7 @@ import Cocoa
 import SafariServices
 import WebKit
 
-let extensionBundleIdentifier = "com.facetbuild.applemusiclover.Extension"
+let extensionBundleIdentifier = "com.facetbuild.applemusiclover.extension"
 
 class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
