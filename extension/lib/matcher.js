@@ -97,7 +97,7 @@ const GENRE_CORE = {
   "electronic":   ["electronic", "electronica", "synth-pop", "idm", "downtempo", "ambient"],
   "dance":        ["dance", "house", "edm", "electronic", "electronica"],
   "house":        ["house", "deep house", "tech house", "electronic", "dance"],
-  "techno":       ["techno", "electronic", "electronica", "industrial"],
+  "techno":       ["techno", "electronic", "electronica", "industrial", "dance", "house", "edm"],
   "pop":          ["pop", "pop/rock", "synth-pop", "teen pop", "k-pop", "j-pop", "electropop"],
   "hip-hop/rap":  ["hip-hop/rap", "hip-hop", "rap", "trap", "underground rap", "gangsta rap", "west coast rap", "east coast rap", "old school rap", "conscious rap", "hardcore rap", "southern rap", "crunk", "bounce"],
   "r&b/soul":     ["r&b/soul", "r&b", "soul", "neo-soul", "contemporary r&b", "motown"],

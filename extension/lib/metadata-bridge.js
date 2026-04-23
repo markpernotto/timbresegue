@@ -63,12 +63,13 @@ async function getDeezerRadio(artistDeezerId, limit = 25) {
 
 // Fallback: BPM-range search when artist radio isn't available yet.
 const BPM_FALLBACK_QUERIES = ["remix", "club mix", "feat", "remaster", "radio edit"];
+const BEAT_PATTERN = /\b(instrumental|beat mix|rap beat|hip hop beat|trap beat|beatmaker|type beat|backing track|karaoke)\b/i;
+
 async function searchDeezerByBPM(bpmMin, bpmMax, limit = 25, genre = null) {
   const q   = encodeURIComponent(genre ?? BPM_FALLBACK_QUERIES[Math.floor(Math.random() * BPM_FALLBACK_QUERIES.length)]);
   const url = `${DEEZER_BASE}/search/track?q=${q}&bpm_min=${bpmMin}&bpm_max=${bpmMax}&limit=${limit}`;
   const res  = await fetch(url);
   const data = await res.json();
-  const BEAT_PATTERN = /\b(instrumental|beat mix|rap beat|hip hop beat|trap beat|beatmaker|type beat|backing track|karaoke)\b/i;
   return (data.data ?? [])
     .filter(t => t.isrc && !BEAT_PATTERN.test(t.title))
     .map(t => ({
@@ -78,6 +79,72 @@ async function searchDeezerByBPM(bpmMin, bpmMax, limit = 25, genre = null) {
       deezerId: t.id,
       bpm:      t.bpm ?? null,
     }));
+}
+
+// Run all neutral queries in parallel — 5× the candidates in the same latency as one.
+async function searchDeezerByBPMWide(bpmMin, bpmMax, limit = 25) {
+  const results = await Promise.all(
+    BPM_FALLBACK_QUERIES.map(q =>
+      fetch(`${DEEZER_BASE}/search/track?q=${encodeURIComponent(q)}&bpm_min=${bpmMin}&bpm_max=${bpmMax}&limit=${limit}`)
+        .then(r => r.json())
+        .then(d => d.data ?? [])
+        .catch(() => [])
+    )
+  );
+  const seen = new Set();
+  return results.flat()
+    .filter(t => {
+      if (!t.isrc || BEAT_PATTERN.test(t.title) || seen.has(t.isrc)) return false;
+      seen.add(t.isrc);
+      return true;
+    })
+    .map(t => ({
+      title:    t.title,
+      artist:   t.artist?.name,
+      isrc:     t.isrc,
+      deezerId: t.id,
+      bpm:      t.bpm ?? null,
+    }));
+}
+
+// Genre radio — proper genre-tagged pool, unlike keyword search.
+async function getDeezerGenreRadio(genreId, limit = 50) {
+  const res  = await fetch(`${DEEZER_BASE}/genre/${genreId}/radio?limit=${limit}`);
+  const data = await res.json();
+  if (data.error) return [];
+  const raw = (data.data ?? []).slice(0, limit);
+
+  // Enrich tracks missing ISRC — cap at 15 parallel requests to stay within budget.
+  const needsEnrich = raw.filter(t => !t.isrc).slice(0, 15);
+  const enriched = new Map(
+    await Promise.all(
+      needsEnrich.map(async t => {
+        try {
+          const r = await fetch(`${DEEZER_BASE}/track/${t.id}`);
+          const d = await r.json();
+          if (d.error) return [t.id, null];
+          return [t.id, { isrc: d.isrc ?? null, bpm: d.bpm ?? null }];
+        } catch { return [t.id, null]; }
+      })
+    )
+  );
+
+  return raw
+    .map(t => {
+      const extra = enriched.get(t.id);
+      const isrc  = t.isrc ?? extra?.isrc ?? null;
+      if (!isrc) return null;
+      return {
+        title:          t.title,
+        artist:         t.artist?.name,
+        artistDeezerId: t.artist?.id ?? null,
+        isrc,
+        deezerId:       t.id,
+        bpm:            t.bpm ?? extra?.bpm ?? null,
+        duration:       t.duration,
+      };
+    })
+    .filter(Boolean);
 }
 
 // Search Deezer for an artist by name, return their Deezer ID.
@@ -113,4 +180,4 @@ async function getMusicBrainzFirstRelease(isrc) {
   return date;
 }
 
-export { getDeezerTrackByISRC, getDeezerRadio, searchDeezerByBPM, searchDeezerArtist, getMusicBrainzFirstRelease };
+export { getDeezerTrackByISRC, getDeezerRadio, searchDeezerByBPM, searchDeezerByBPMWide, getDeezerGenreRadio, searchDeezerArtist, getMusicBrainzFirstRelease };

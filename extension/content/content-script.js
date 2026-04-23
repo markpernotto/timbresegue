@@ -86,6 +86,22 @@ function searchDeezerByBPM(bpmMin, bpmMax, genre = null) {
   });
 }
 
+function searchDeezerByBPMWide(bpmMin, bpmMax) {
+  return new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "GET_BPM_SEARCH_WIDE", bpmMin, bpmMax }, r => {
+      resolve(Array.isArray(r) ? r : []);
+    });
+  });
+}
+
+function getDeezerGenreRadio(genreId) {
+  return new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "GET_GENRE_RADIO", genreId }, r => {
+      resolve(Array.isArray(r) ? r : []);
+    });
+  });
+}
+
 // --- Apple Music catalog (uses tokens from page bridge) ---
 
 // Maps user-facing genre names to Apple Music genre IDs.
@@ -113,6 +129,40 @@ const AM_GENRE_IDS = {
   "rock":          21,
   "reggae":        24,
   "metal":         1153,
+};
+
+// Typical BPM ranges per genre — used when avgBPM is null (Deezer couldn't find the playing tracks).
+// Keeps the BPM search in the right tempo neighbourhood instead of defaulting to 60–190.
+const GENRE_BPM_RANGES = {
+  "techno":       [128, 150],
+  "house":        [120, 135],
+  "dance":        [118, 138],
+  "electronic":   [110, 145],
+  "disco":        [100, 130],
+  "funk":         [90,  120],
+  "hip-hop/rap":  [75,  105],
+  "r&b/soul":     [65,  100],
+  "pop":          [90,  130],
+  "rock":         [110, 160],
+  "metal":        [140, 220],
+  "reggae":       [60,  90],
+};
+
+// Deezer genre IDs for the /genre/{id}/radio endpoint.
+// 106 = Electro, 113 = Dance (covers house/techno), 116 = Rap/Hip Hop,
+// 132 = Pop, 152 = Rock, 169 = R&B, 197 = Soul & Funk, 464 = Metal, 144 = Latin.
+const DEEZER_GENRE_IDS = {
+  "techno":       106,
+  "house":        113,
+  "electronic":   106,
+  "dance":        113,
+  "hip-hop/rap":  116,
+  "pop":          132,
+  "rock":         152,
+  "r&b/soul":     169,
+  "funk":         197,
+  "metal":        464,
+  "latin":        144,
 };
 
 // Fetch Apple Music genre chart — songs are guaranteed to carry correct Apple Music genre tags.
@@ -216,56 +266,55 @@ async function queueNextVibeTrack() {
     };
     const scoreThreshold = userOverrides.scoreThreshold ?? 3;
 
-    // When genre is forced, pull from Apple Music's genre chart first.
-    // These songs carry correct Apple Music genre tags by definition — no ISRC resolution needed.
-    // Deezer BPM search still runs in parallel for additional variety.
-    const forcedGenreId = profileForScoring.forcedGenre
-      ? AM_GENRE_IDS[profileForScoring.forcedGenre.toLowerCase()] ?? null
-      : null;
+    // BPM search range: use detected profile if available, else fall back to genre-typical range.
+    // Genre-specific defaults prevent a wide 60–190 sweep when BPM data is unavailable
+    // (e.g. niche artists Deezer doesn't know about).
+    const genreBpmRange = fg ? GENRE_BPM_RANGES[fg.toLowerCase()] : null;
+    const baseBpmMin = profileForScoring.bpmMin ?? (genreBpmRange?.[0] ?? 90);
+    const baseBpmMax = profileForScoring.bpmMax ?? (genreBpmRange?.[1] ?? 160);
+    const searchMin  = baseBpmMin;
+    const searchMax  = baseBpmMax;
 
+    // Apple Music genre chart — correct genre tags, no ISRC resolution needed.
+    const forcedGenreId = fg ? AM_GENRE_IDS[fg.toLowerCase()] ?? null : null;
     let chartCandidates = [];
     if (forcedGenreId) {
-      // Always use the genre chart as the primary candidate source — songs here carry
-      // correct Apple Music genre tags by definition, unlike keyword search which matches
-      // song *titles* (e.g. "All That Jazz" is not a jazz track).
-      // When era is also forced, era preference is handled by soft scoring (dominantDecade),
-      // not by pre-filtering. This keeps the candidate pool full for niche genres like Jazz.
       try {
         const chart = await getAppleMusicGenreChart(forcedGenreId, 50);
         chartCandidates = chart.sort(() => Math.random() - 0.5);
       } catch (fetchErr) {
-        log("[AML] Genre chart fetch failed, falling back to Deezer only:", fetchErr?.message);
+        log("[AML] Genre chart fetch failed:", fetchErr?.message);
       }
     }
+
+    // Pre-fetch all Deezer sources in parallel — wide BPM search (all 5 neutral queries at once)
+    // and genre radio (authentic genre-tagged pool). Both run once before the scoring loop
+    // so retries don't hammer the API.
+    const deezerGenreId = fg ? DEEZER_GENRE_IDS[fg.toLowerCase()] ?? null : null;
+    const [bpmCandidates, genreRadioCandidates] = await Promise.all([
+      searchDeezerByBPMWide(searchMin, searchMax),
+      deezerGenreId ? getDeezerGenreRadio(deezerGenreId) : Promise.resolve([]),
+    ]);
+    log(`[AML] Candidate pool — chart: ${chartCandidates.length}, genre radio: ${genreRadioCandidates.length}, BPM wide: ${bpmCandidates.length}`);
 
     // When genre is forced, only exclude by track ID (not by artist) — the genre chart
     // has limited artists and artist-exclusion quickly starves the pool.
     const excludedArtists = profileForScoring.forcedGenre
-      ? new Set([...currentProfile.recentArtists])  // only avoid what's currently playing
+      ? new Set([...currentProfile.recentArtists])
       : new Set([...currentProfile.recentArtists, ...queuedArtists]);
 
-    // Patch the scoring profile with the right artist exclusion set
     profileForScoring.recentArtists = excludedArtists;
 
-    // Up to 5 attempts — each gets a fresh random BPM query for variety.
-    // When genre is locked, skip artist radio entirely — the current artist's neighbors
-    // are unlikely to match a different genre, creating an unrecoverable death spiral.
+    // Up to 5 attempts. When genre is locked, skip artist radio — the current artist's
+    // neighbours are unlikely to match a different genre.
     const useRadio = !userOverrides.forcedGenre;
     for (let attempt = 0; attempt < 5 && !scored.length; attempt++) {
       const seedArtistId = radioSeedQueue.length > 0 ? radioSeedQueue[0] : fallbackSeedId;
 
-      let candidates = [...chartCandidates];  // always start with genre-chart songs if available
+      let candidates = [...chartCandidates, ...genreRadioCandidates, ...bpmCandidates];
       if (useRadio && attempt === 0 && seedArtistId) {
         candidates = [...candidates, ...await getDeezerRadio(seedArtistId)];
       }
-
-      // BPM search — neutral queries only (genre name matches song titles on Deezer, not genre).
-      // Widen BPM range when genre is forced: genre chart does heavy filtering, tight BPM starves results.
-      const baseBpmMin = profileForScoring.bpmMin ?? 90;
-      const baseBpmMax = profileForScoring.bpmMax ?? 160;
-      const searchMin = userOverrides.forcedGenre ? Math.max(60,  baseBpmMin - 30) : baseBpmMin;
-      const searchMax = userOverrides.forcedGenre ? Math.min(220, baseBpmMax + 30) : baseBpmMax;
-      candidates = [...candidates, ...await searchDeezerByBPM(searchMin, searchMax, null)];
 
       if (!candidates.length) continue;
 
