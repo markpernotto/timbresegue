@@ -15,7 +15,7 @@
 		61B54BB72F8846D1006907B6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BB62F8846D1006907B6 /* ViewController.swift */; };
 		61B54BBA2F8846D1006907B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB82F8846D1006907B6 /* Main.storyboard */; };
 		61B54BBC2F8846D2006907B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BBB2F8846D2006907B6 /* Assets.xcassets */; };
-		61B54BC32F8846D2006907B6 /* Apple Music Lover Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		61B54BC32F8846D2006907B6 /* Timbre Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61B54BC22F8846D2006907B6 /* Timbre Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		61B54BC82F8846D2006907B6 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */; };
 		61B54BDA2F8846D2006907B6 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD42F8846D2006907B6 /* background */; };
 		61B54BDB2F8846D2006907B6 /* popup in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD52F8846D2006907B6 /* popup */; };
@@ -31,7 +31,7 @@
 			containerPortal = 61B54B9F2F8846D1006907B6 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 61B54BC12F8846D2006907B6;
-			remoteInfo = "Apple Music Lover Extension";
+			remoteInfo = "Timbre Extension";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -42,7 +42,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				61B54BC32F8846D2006907B6 /* Apple Music Lover Extension.appex in Embed Foundation Extensions */,
+				61B54BC32F8846D2006907B6 /* Timbre Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,7 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		61B54BA72F8846D1006907B6 /* Apple Music Lover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Apple Music Lover.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BA72F8846D1006907B6 /* Timbre.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Timbre.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B54BAA2F8846D1006907B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61B54BAE2F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
 		61B54BB02F8846D1006907B6 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 		61B54BB92F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		61B54BBB2F8846D2006907B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61B54BBD2F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Apple Music Lover Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BC22F8846D2006907B6 /* Timbre Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Timbre Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		61B54BC92F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61B54BD42F8846D2006907B6 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../extension/background; sourceTree = "<group>"; };
@@ -122,8 +122,8 @@
 		61B54BA82F8846D1006907B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B54BA72F8846D1006907B6 /* Apple Music Lover.app */,
-				61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */,
+				61B54BA72F8846D1006907B6 /* Timbre.app */,
+				61B54BC22F8846D2006907B6 /* Timbre Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -138,7 +138,7 @@
 				61B54BBD2F8846D2006907B6 /* Info.plist */,
 				61B54BAC2F8846D1006907B6 /* Resources */,
 			);
-			path = "Apple Music Lover";
+			path = Timbre;
 			sourceTree = "<group>";
 		};
 		61B54BAC2F8846D1006907B6 /* Resources */ = {
@@ -159,7 +159,7 @@
 				61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */,
 				61B54BC92F8846D2006907B6 /* Info.plist */,
 			);
-			path = "Apple Music Lover Extension";
+			path = "Timbre Extension";
 			sourceTree = "<group>";
 		};
 		61B54BD32F8846D2006907B6 /* Resources */ = {
@@ -173,7 +173,7 @@
 				61B54BD92F8846D2006907B6 /* assets */,
 			);
 			name = Resources;
-			path = "Apple Music Lover Extension";
+			path = "Timbre Extension";
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -193,11 +193,11 @@
 			dependencies = (
 				61B54BC52F8846D2006907B6 /* PBXTargetDependency */,
 			);
-			name = "Apple Music Lover";
+			name = Timbre;
 			packageProductDependencies = (
 			);
-			productName = "Apple Music Lover";
-			productReference = 61B54BA72F8846D1006907B6 /* Apple Music Lover.app */;
+			productName = Timbre;
+			productReference = 61B54BA72F8846D1006907B6 /* Timbre.app */;
 			productType = "com.apple.product-type.application";
 		};
 		61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */ = {
@@ -213,11 +213,11 @@
 			);
 			dependencies = (
 			);
-			name = "Apple Music Lover Extension";
+			name = "Timbre Extension";
 			packageProductDependencies = (
 			);
-			productName = "Apple Music Lover Extension";
-			productReference = 61B54BC22F8846D2006907B6 /* Apple Music Lover Extension.appex */;
+			productName = "Timbre Extension";
+			productReference = 61B54BC22F8846D2006907B6 /* Timbre Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -463,8 +463,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Apple Music Lover Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover Extension";
+				INFOPLIST_FILE = "Timbre Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Timbre Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -498,8 +498,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Apple Music Lover Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover Extension";
+				INFOPLIST_FILE = "Timbre Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Timbre Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -537,8 +537,8 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Apple Music Lover/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover";
+				INFOPLIST_FILE = "Timbre/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Timbre;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Facet Build, LLC";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -556,7 +556,7 @@
 					WebKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover;
-				PRODUCT_NAME = "Apple Music Lover";
+				PRODUCT_NAME = Timbre;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -581,8 +581,8 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Apple Music Lover/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Apple Music Lover";
+				INFOPLIST_FILE = "Timbre/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Timbre;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Facet Build, LLC";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -600,7 +600,7 @@
 					WebKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.facetbuild.applemusiclover;
-				PRODUCT_NAME = "Apple Music Lover";
+				PRODUCT_NAME = Timbre;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

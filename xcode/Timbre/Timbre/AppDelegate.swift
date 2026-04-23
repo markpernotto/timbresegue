@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Apple Music Lover
+//  Timbre
 //
 //  Created by gmarqu3 on 4/9/26.
 //

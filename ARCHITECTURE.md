@@ -2,7 +2,7 @@
 
 ## Overview
 
-Apple Music Lover is a Manifest V3 Safari extension with three independent execution contexts that communicate via message passing. No single script can do everything — MusicKit JS is only accessible from the page's own JavaScript context, but CORS-restricted API calls require either the isolated extension world or the background service worker.
+Timbre is a Manifest V3 Safari extension with three independent execution contexts that communicate via message passing. No single script can do everything — MusicKit JS is only accessible from the page's own JavaScript context, but CORS-restricted API calls require either the isolated extension world or the background service worker.
 
 ```
 ┌─────────────────────────────────────────────────────────┐

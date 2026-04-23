@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  Apple Music Lover
+//  Timbre
 //
 //  Created by gmarqu3 on 4/9/26.
 //
@@ -49,6 +49,10 @@ class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHan
 
         SFSafariApplication.showPreferencesForExtension(withIdentifier: extensionBundleIdentifier) { error in
             DispatchQueue.main.async {
+                if error != nil,
+                   let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
+                    NSWorkspace.shared.open(url)
+                }
                 NSApplication.shared.terminate(nil)
             }
         }

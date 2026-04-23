@@ -1,6 +1,6 @@
 //
 //  SafariWebExtensionHandler.swift
-//  Apple Music Lover Extension
+//  Timbre Extension
 //
 //  Created by gmarqu3 on 4/9/26.
 //

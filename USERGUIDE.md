@@ -1,4 +1,4 @@
-# Apple Music Lover — User Guide
+# Timbre — User Guide
 
 ## How it works
 
