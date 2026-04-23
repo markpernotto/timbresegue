@@ -15,7 +15,7 @@
 		61B54BB72F8846D1006907B6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BB62F8846D1006907B6 /* ViewController.swift */; };
 		61B54BBA2F8846D1006907B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BB82F8846D1006907B6 /* Main.storyboard */; };
 		61B54BBC2F8846D2006907B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BBB2F8846D2006907B6 /* Assets.xcassets */; };
-		61B54BC32F8846D2006907B6 /* Timbre Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61B54BC22F8846D2006907B6 /* Timbre Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		61B54BC32F8846D2006907B6 /* Timbre Segue Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61B54BC22F8846D2006907B6 /* Timbre Segue Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		61B54BC82F8846D2006907B6 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */; };
 		61B54BDA2F8846D2006907B6 /* background in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD42F8846D2006907B6 /* background */; };
 		61B54BDB2F8846D2006907B6 /* popup in Resources */ = {isa = PBXBuildFile; fileRef = 61B54BD52F8846D2006907B6 /* popup */; };
@@ -42,7 +42,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				61B54BC32F8846D2006907B6 /* Timbre Extension.appex in Embed Foundation Extensions */,
+				61B54BC32F8846D2006907B6 /* Timbre Segue Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,7 +50,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		61B54BA72F8846D1006907B6 /* Timbre.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Timbre Segue.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BA72F8846D1006907B6 /* Timbre Segue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Timbre Segue.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B54BAA2F8846D1006907B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61B54BAE2F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
 		61B54BB02F8846D1006907B6 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -60,7 +60,7 @@
 		61B54BB92F8846D1006907B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		61B54BBB2F8846D2006907B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61B54BBD2F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61B54BC22F8846D2006907B6 /* Timbre Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Timbre Segue Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61B54BC22F8846D2006907B6 /* Timbre Segue Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Timbre Segue Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B54BC72F8846D2006907B6 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
 		61B54BC92F8846D2006907B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		61B54BD42F8846D2006907B6 /* background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = background; path = ../../../extension/background; sourceTree = "<group>"; };
@@ -70,27 +70,6 @@
 		61B54BD82F8846D2006907B6 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../extension/lib; sourceTree = "<group>"; };
 		61B54BD92F8846D2006907B6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../../extension/assets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		61AE00012FA00000000000A1 /* Run npm build */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run npm build";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\ncd \"$SRCROOT/../../extension\" && npm run build\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		61B54BA42F8846D1006907B6 /* Frameworks */ = {
@@ -113,8 +92,8 @@
 		61B54B9E2F8846D1006907B6 = {
 			isa = PBXGroup;
 			children = (
-				61B54BA92F8846D1006907B6 /* Apple Music Lover */,
-				61B54BC62F8846D2006907B6 /* Apple Music Lover Extension */,
+				61B54BA92F8846D1006907B6 /* Timbre Segue */,
+				61B54BC62F8846D2006907B6 /* Timbre Segue Extension */,
 				61B54BA82F8846D1006907B6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -122,13 +101,13 @@
 		61B54BA82F8846D1006907B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B54BA72F8846D1006907B6 /* Timbre.app */,
-				61B54BC22F8846D2006907B6 /* Timbre Extension.appex */,
+				61B54BA72F8846D1006907B6 /* Timbre Segue.app */,
+				61B54BC22F8846D2006907B6 /* Timbre Segue Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B54BA92F8846D1006907B6 /* Apple Music Lover */ = {
+		61B54BA92F8846D1006907B6 /* Timbre Segue */ = {
 			isa = PBXGroup;
 			children = (
 				61B54BAA2F8846D1006907B6 /* AppDelegate.swift */,
@@ -152,7 +131,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		61B54BC62F8846D2006907B6 /* Apple Music Lover Extension */ = {
+		61B54BC62F8846D2006907B6 /* Timbre Segue Extension */ = {
 			isa = PBXGroup;
 			children = (
 				61B54BD32F8846D2006907B6 /* Resources */,
@@ -179,9 +158,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		61B54BA62F8846D1006907B6 /* Apple Music Lover */ = {
+		61B54BA62F8846D1006907B6 /* Timbre Segue */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover" */;
+			buildConfigurationList = 61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Timbre Segue" */;
 			buildPhases = (
 				61B54BA32F8846D1006907B6 /* Sources */,
 				61B54BA42F8846D1006907B6 /* Frameworks */,
@@ -197,12 +176,12 @@
 			packageProductDependencies = (
 			);
 			productName = "Timbre Segue";
-			productReference = 61B54BA72F8846D1006907B6 /* Timbre.app */;
+			productReference = 61B54BA72F8846D1006907B6 /* Timbre Segue.app */;
 			productType = "com.apple.product-type.application";
 		};
-		61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */ = {
+		61B54BC12F8846D2006907B6 /* Timbre Segue Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover Extension" */;
+			buildConfigurationList = 61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Timbre Segue Extension" */;
 			buildPhases = (
 				61B54BBE2F8846D2006907B6 /* Sources */,
 				61B54BBF2F8846D2006907B6 /* Frameworks */,
@@ -217,7 +196,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Timbre Segue Extension";
-			productReference = 61B54BC22F8846D2006907B6 /* Timbre Extension.appex */;
+			productReference = 61B54BC22F8846D2006907B6 /* Timbre Segue Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -238,7 +217,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Apple Music Lover" */;
+			buildConfigurationList = 61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Timbre Segue" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -252,8 +231,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				61B54BA62F8846D1006907B6 /* Apple Music Lover */,
-				61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */,
+				61B54BA62F8846D1006907B6 /* Timbre Segue */,
+				61B54BC12F8846D2006907B6 /* Timbre Segue Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -287,6 +266,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		61AE00012FA00000000000A1 /* Run npm build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run npm build";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\ncd \"$SRCROOT/../../extension\" && npm run build\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		61B54BA32F8846D1006907B6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -310,7 +310,7 @@
 /* Begin PBXTargetDependency section */
 		61B54BC52F8846D2006907B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 61B54BC12F8846D2006907B6 /* Apple Music Lover Extension */;
+			target = 61B54BC12F8846D2006907B6 /* Timbre Segue Extension */;
 			targetProxy = 61B54BC42F8846D2006907B6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -530,7 +530,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9MQU6VD26K;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -574,7 +574,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 9MQU6VD26K;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -614,7 +614,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Apple Music Lover" */ = {
+		61B54BA22F8846D1006907B6 /* Build configuration list for PBXProject "Timbre Segue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				61B54BCA2F8846D2006907B6 /* Debug */,
@@ -623,7 +623,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover Extension" */ = {
+		61B54BCC2F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Timbre Segue Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				61B54BCD2F8846D2006907B6 /* Debug */,
@@ -632,7 +632,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Apple Music Lover" */ = {
+		61B54BD02F8846D2006907B6 /* Build configuration list for PBXNativeTarget "Timbre Segue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				61B54BD12F8846D2006907B6 /* Debug */,
