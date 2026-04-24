@@ -95,6 +95,14 @@ function getDeezerRadio(artistDeezerId) {
   });
 }
 
+function getDeezerSimilarArtistTracks(artistDeezerId, artistLimit = 3, tracksPerArtist = 8) {
+  return new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: "GET_SIMILAR_ARTIST_TRACKS", artistDeezerId, artistLimit, tracksPerArtist }, r => {
+      resolve(Array.isArray(r) ? r : []);
+    });
+  });
+}
+
 function searchDeezerByBPM(bpmMin, bpmMax, genre = null) {
   return new Promise(resolve => {
     chrome.runtime.sendMessage({ type: "GET_BPM_SEARCH", bpmMin, bpmMax, genre }, r => {
@@ -155,6 +163,17 @@ const GENRE_BPM_RANGES = {
   "rock":         [110, 160],
   "metal":        [140, 220],
   "reggae":       [60,  90],
+  "classical":    [60,  110],
+  "jazz":         [90,  140],
+  "blues":        [70,  110],
+  "country":      [95,  135],
+  "latin":        [90,  140],
+  "alternative":  [110, 150],
+  "indie":        [100, 140],
+  "folk":         [80,  120],
+  "singer/songwriter": [75, 115],
+  "k-pop":        [110, 140],
+  "techno":       [125, 150],
 };
 
 // Genre-specific Deezer search phrases — used when genre is forced to supplement the neutral
@@ -183,10 +202,10 @@ const GENRE_SEARCH_TERMS = {
 
 // Fetch Apple Music genre chart — songs are guaranteed to carry correct Apple Music genre tags.
 // Cheaper than resolveISRC per-candidate: one call returns up to `limit` fully-attributed songs.
-async function getAppleMusicGenreChart(genreId, limit = 25) {
+async function getAppleMusicGenreChart(genreId, limit = 25, offset = 0) {
   if (!pageTokens?.dev) return [];
   const storefront = pageTokens.storefront ?? "us";
-  const url = `https://api.music.apple.com/v1/catalog/${storefront}/charts?types=songs&genre=${genreId}&limit=${limit}`;
+  const url = `https://api.music.apple.com/v1/catalog/${storefront}/charts?types=songs&genre=${genreId}&limit=${limit}&offset=${offset}`;
   const res = await fetch(url, {
     headers: {
       "Authorization":    `Bearer ${pageTokens.dev}`,
@@ -230,6 +249,50 @@ async function resolveISRC(isrc) {
     isrc:        song.attributes?.isrc,
     _raw:        song,   // raw API object — passed to page-bridge for queue insertion (avoids CORS)
   };
+}
+
+// Apple Music catalog search — much broader variety than the top-25 chart,
+// and returns real Apple-tagged tracks (no Deezer→Apple genre round-trip needed).
+async function searchAppleMusicByTerm(term, limit = 25, offset = 0) {
+  if (!pageTokens?.dev || !term) return [];
+  const storefront = pageTokens.storefront ?? "us";
+  const url = `https://api.music.apple.com/v1/catalog/${storefront}/search?types=songs&limit=${limit}&offset=${offset}&term=${encodeURIComponent(term)}`;
+  const res = await fetch(url, {
+    headers: { "Authorization": `Bearer ${pageTokens.dev}`, "Music-User-Token": pageTokens.user },
+  });
+  const data = await res.json();
+  return (data.results?.songs?.data ?? []).map(song => ({
+    id:          song.id,
+    title:       song.attributes?.name,
+    artistName:  song.attributes?.artistName,
+    albumName:   song.attributes?.albumName,
+    genreNames:  song.attributes?.genreNames ?? [],
+    releaseDate: song.attributes?.releaseDate,
+    isrc:        song.attributes?.isrc,
+    bpm:         null,
+    _raw:        song,
+  }));
+}
+
+// Fallback enrichment when ISRC is missing — title+artist catalog search.
+async function searchCatalog(term) {
+  if (!pageTokens?.dev || !term) return [];
+  const url = `https://api.music.apple.com/v1/catalog/${pageTokens.storefront ?? "us"}/search?types=songs&limit=5&term=${encodeURIComponent(term)}`;
+  const res = await fetch(url, {
+    headers: {
+      "Authorization":    `Bearer ${pageTokens.dev}`,
+      "Music-User-Token": pageTokens.user,
+    }
+  });
+  const data = await res.json();
+  return (data.results?.songs?.data ?? []).map(song => ({
+    id:          song.id,
+    title:       song.attributes?.name,
+    artistName:  song.attributes?.artistName,
+    genreNames:  song.attributes?.genreNames ?? [],
+    releaseDate: song.attributes?.releaseDate,
+    isrc:        song.attributes?.isrc,
+  }));
 }
 
 // --- Core recommendation pipeline ---
@@ -298,29 +361,31 @@ async function queueNextVibeTrack() {
     const searchMin  = baseBpmMin;
     const searchMax  = baseBpmMax;
 
-    // Apple Music genre chart — correct genre tags, no ISRC resolution needed.
-    const forcedGenreId = fg ? AM_GENRE_IDS[fg.toLowerCase()] ?? null : null;
-    let chartCandidates = [];
-    if (forcedGenreId) {
-      try {
-        const chart = await getAppleMusicGenreChart(forcedGenreId, 50);
-        chartCandidates = chart.sort(() => Math.random() - 0.5);
-      } catch (fetchErr) {
-        log("[TS] Genre chart fetch failed:", fetchErr?.message);
-      }
-    }
+    // Apple Music chart + search — fire for the active genre (forced OR auto-detected).
+    // Chart = top tracks in the genre; search = broader variety. Random offsets keep
+    // successive sessions from returning the same 25 tracks over and over.
+    const activeGenreId = activeGenre ? AM_GENRE_IDS[activeGenre.toLowerCase()] ?? null : null;
+    const chartOffset   = Math.floor(Math.random() * 100);
+    const searchOffset  = Math.floor(Math.random() * 100);
+    // When era is forced, append the decade label to bias Apple Music search toward
+    // era-authentic tracks — e.g. "disco 1970s" pulls classic disco, not modern dance.
+    const decadeSuffix  = (fd && fd !== "pre1960") ? ` ${fd}s` : (fd === "pre1960" ? " classic" : "");
+    const amSearchTerm  = activeGenre ? `${GENRE_SEARCH_TERMS[activeGenre.toLowerCase()] ?? activeGenre}${decadeSuffix}` : null;
 
-    // Pre-fetch all Deezer sources in parallel — wide BPM search (5 neutral queries at once)
-    // and a genre-keyword BPM search for the active genre (forced or auto-detected). Both run
-    // once before the scoring loop so retries don't hammer the API.
+    const [chartRaw, amSearchCandidates] = await Promise.all([
+      activeGenreId ? getAppleMusicGenreChart(activeGenreId, 50, chartOffset).catch(e => { log("[TS] Chart fetch failed:", e?.message); return []; }) : Promise.resolve([]),
+      amSearchTerm  ? searchAppleMusicByTerm(amSearchTerm, 25, searchOffset).catch(e => { log("[TS] AM search failed:", e?.message); return []; }) : Promise.resolve([]),
+    ]);
+    const chartCandidates = chartRaw.sort(() => Math.random() - 0.5);
+
+    // Deezer fallback sources — kept as a safety net but now secondary to Apple Music.
     // Note: Deezer's /genre/{id}/radio endpoint was removed (returns 600 error for all IDs).
-    const activeGenreForSearch = fg ?? profileForScoring.primaryGenre ?? null;
-    const genreSearchTerm = activeGenreForSearch ? GENRE_SEARCH_TERMS[activeGenreForSearch.toLowerCase()] ?? null : null;
+    const genreSearchTerm = activeGenre ? GENRE_SEARCH_TERMS[activeGenre.toLowerCase()] ?? null : null;
     const [bpmCandidates, genreCandidates] = await Promise.all([
       searchDeezerByBPMWide(searchMin, searchMax),
       genreSearchTerm ? searchDeezerByBPM(searchMin, searchMax, 50, genreSearchTerm) : Promise.resolve([]),
     ]);
-    log(`[TS] Candidate pool — chart: ${chartCandidates.length}, genre search: ${genreCandidates.length}, BPM wide: ${bpmCandidates.length}`);
+    log(`[TS] Candidate pool — AM chart: ${chartCandidates.length}, AM search: ${amSearchCandidates.length}, Deezer genre: ${genreCandidates.length}, Deezer BPM: ${bpmCandidates.length}`);
 
     // When genre is forced, only exclude by track ID (not by artist) — the genre chart
     // has limited artists and artist-exclusion quickly starves the pool.
@@ -336,9 +401,18 @@ async function queueNextVibeTrack() {
     for (let attempt = 0; attempt < 5 && !scored.length; attempt++) {
       const seedArtistId = radioSeedQueue.length > 0 ? radioSeedQueue[0] : fallbackSeedId;
 
-      let candidates = [...chartCandidates, ...genreCandidates, ...bpmCandidates];
+      let candidates = [...chartCandidates, ...amSearchCandidates, ...genreCandidates, ...bpmCandidates];
       if (useRadio && attempt === 0 && seedArtistId) {
-        candidates = [...candidates, ...await getDeezerRadio(seedArtistId)];
+        // Two parallel artist-seeded sources: radio (Deezer's curated mix) and similar-artists
+        // top tracks (3 related artists × their top 8). Similar-artists gives much stronger
+        // "new discovery within the genre" signal than radio, which tends to pull hits of the
+        // seed artist themselves. Both still get filtered by BPM/era/genre below.
+        const [radioTracks, similarTracks] = await Promise.all([
+          getDeezerRadio(seedArtistId),
+          getDeezerSimilarArtistTracks(seedArtistId, 3, 8),
+        ]);
+        log(`[TS] Artist-seeded — radio: ${radioTracks.length}, similar-artist top tracks: ${similarTracks.length}`);
+        candidates = [...candidates, ...radioTracks, ...similarTracks];
       }
 
       if (!candidates.length) continue;
@@ -585,15 +659,25 @@ async function onNowPlayingChanged(track) {
   // New track = fresh start for the retry counter.
   queueNextVibeTrack._consecutiveFailures = 0;
 
-  // Look up genres from Apple Music catalog — MusicKit doesn't always expose them
+  // Look up catalog metadata from Apple Music — MusicKit doesn't expose ISRC or genres
+  // for library-owned tracks (id starts with "i."), which kills Deezer/MusicBrainz lookups
+  // for the now-playing song. Fall back to title+artist search and pull BOTH genres AND
+  // ISRC from the catalog match.
   let genres = track.genreNames ?? [];
-  if ((!genres.length || genres.every(g => g === "Music")) && track.isrc && pageTokens) {
-    const catalogTrack = await resolveISRC(track.isrc);
+  let resolvedISRC = track.isrc ?? null;
+  if ((!genres.length || genres.every(g => g === "Music") || !resolvedISRC) && pageTokens) {
+    let catalogTrack = null;
+    if (resolvedISRC) catalogTrack = await resolveISRC(resolvedISRC);
+    if (!catalogTrack && track.title && track.artistName) {
+      const hits = await searchCatalog(`${track.title} ${track.artistName}`);
+      catalogTrack = hits.find(h => h.artistName?.toLowerCase() === track.artistName.toLowerCase()) ?? hits[0] ?? null;
+    }
     if (catalogTrack?.genreNames?.length) genres = catalogTrack.genreNames;
+    if (catalogTrack?.isrc && !resolvedISRC) resolvedISRC = catalogTrack.isrc;
   }
 
-  const enriched = { ...track, genreNames: genres, bpm: null };
-  log(`[TS] Now playing: "${track.title}" — ${track.artistName}  ISRC: ${track.isrc}  Genres: ${genres.join(", ")}`);
+  const enriched = { ...track, isrc: resolvedISRC, genreNames: genres, bpm: null };
+  log(`[TS] Now playing: "${track.title}" — ${track.artistName}  ISRC: ${resolvedISRC ?? "—"}  Genres: ${genres.join(", ")}`);
 
   if (track.id) playedThisSession.add(track.id);
   recentTracks.push(enriched);
@@ -619,14 +703,14 @@ async function onNowPlayingChanged(track) {
   const myGeneration = ++enrichmentGeneration;
   enrichmentPending  = true;
   enrichmentUntil    = Date.now() + ENRICHMENT_TIMEOUT_MS;
-  if (track.isrc) {
+  if (resolvedISRC) {
     // If AML queued this track, knownMBDate is already the pre-verified first-release-date.
     // Skip the MB network call; only call for tracks Apple Music inserted (manual plays, etc.).
     const mbPromise = knownMBDate
       ? Promise.resolve(knownMBDate)
-      : getMBFirstRelease(track.isrc);
+      : getMBFirstRelease(resolvedISRC);
     Promise.all([
-      getDeezerTrack(track.isrc),
+      getDeezerTrack(resolvedISRC),
       mbPromise,
     ]).then(([deezer, mbDate]) => {
       // A newer track started while we were waiting — don't touch shared state.
@@ -695,6 +779,35 @@ async function onQueueChanged(items, position) {
   chrome.storage.local.set({
     upNextList: realAhead.map(t => ({ id: t.id, title: t.title, artistName: t.artistName })),
   }).catch(() => {});
+
+  // Heads-up when Apple Music's AutoPlay has inserted its own picks ahead of ours.
+  // Signature: we have TS tracks in the queue (alreadyQueued non-empty) but the next
+  // track ahead isn't one of them. That's Apple's `∞` AutoPlay squeezing in.
+  const firstAhead = (items ?? [])[position + 1];
+  if (firstAhead?.id && alreadyQueued.size > 0 && !alreadyQueued.has(firstAhead.id)) {
+    const tsTracksBehind = (items ?? []).slice(position + 1).filter(t => t?.id && alreadyQueued.has(t.id)).length;
+    if (tsTracksBehind > 0) {
+      log(`[TS] Apple AutoPlay is inserting tracks ahead of your TS queue — disable the ∞ AutoPlay toggle to keep Timbre Segue in control`);
+    }
+  }
+
+  // Evict already-played tracks that are still sitting in the real queue ahead of us.
+  // Happens when the user hits back: the track we were on stays in the forward queue and
+  // plays again after the back-navigated track finishes. Filter those out so the session
+  // moves forward instead of replaying.
+  const stalePlayedIds = (items ?? [])
+    .slice(position + 1)
+    .filter(t => t?.id && playedThisSession.has(t.id))
+    .map(t => t.id);
+  if (stalePlayedIds.length) {
+    log(`[TS] Evicting ${stalePlayedIds.length} already-played track(s) from real queue:`,
+      (items ?? []).filter(t => stalePlayedIds.includes(t?.id)).map(t => t.title).join(", "));
+    window.postMessage({ type: `${PREFIX}CLEAR_QUEUED`, ids: stalePlayedIds }, "*");
+    stalePlayedIds.forEach(id => alreadyQueued.delete(id));
+    upNextList = upNextList.filter(t => !stalePlayedIds.includes(t.id));
+    saveUpNext();
+    return; // The CLEAR triggers another queue-changed — let that pass be the real recommend pass.
+  }
 
   if (items.length <= position + QUEUE_AHEAD) {
     log(`[TS] Queue changed — only ${items.length - position - 1} tracks ahead, waiting for queue to fill`);
@@ -772,6 +885,13 @@ window.addEventListener("message", e => {
       break;
     case `${PREFIX}PLAY_NEXT_OK`:
       break;
+    case `${PREFIX}DEBUG_DUMP`: {
+      const replyId = e.data.id;
+      dumpNowPlayingFull().then(result => {
+        window.postMessage({ type: `${PREFIX}DEBUG_DUMP_REPLY`, id: replyId, result }, "*");
+      });
+      break;
+    }
   }
 });
 
@@ -888,12 +1008,70 @@ setInterval(() => {
   });
 }, 500);
 
+// --- Debug: dump full raw API responses for the now-playing track ---
+// Usage from Safari console:  window.tsDump()
+async function dumpNowPlayingFull() {
+  const nowPlaying = recentTracks[recentTracks.length - 1];
+  if (!nowPlaying) { console.log("[TS DEBUG] Nothing playing yet"); return { error: "no track" }; }
+
+  const { isrc, id, title, artistName } = nowPlaying;
+  console.log("[TS DEBUG] ===== Dumping full metadata for:", title, "—", artistName, "=====");
+  console.log("[TS DEBUG] MusicKit state:", nowPlaying);
+
+  let appleFull = null;
+  if (pageTokens?.dev) {
+    // Library IDs (start with "i.") can't be queried via the catalog /songs endpoint.
+    // Use search by title+artist instead — returns the catalog equivalent with full metadata.
+    const isLibraryId = typeof id === "string" && id.startsWith("i.");
+    try {
+      if (!isLibraryId && id) {
+        const url = `https://api.music.apple.com/v1/catalog/${pageTokens.storefront ?? "us"}/songs/${id}?include=albums,artists,composers&extend=artistUrl,editorialNotes`;
+        const res = await fetch(url, {
+          headers: { "Authorization": `Bearer ${pageTokens.dev}`, "Music-User-Token": pageTokens.user },
+        });
+        appleFull = await res.json();
+      } else if (title && artistName) {
+        const url = `https://api.music.apple.com/v1/catalog/${pageTokens.storefront ?? "us"}/search?types=songs&limit=3&include=albums,artists&term=${encodeURIComponent(`${title} ${artistName}`)}`;
+        const res = await fetch(url, {
+          headers: { "Authorization": `Bearer ${pageTokens.dev}`, "Music-User-Token": pageTokens.user },
+        });
+        appleFull = await res.json();
+      }
+    } catch (e) { appleFull = { error: e?.message }; }
+  }
+  console.log("[TS DEBUG] Apple Music Catalog (full):", appleFull);
+
+  let deezerFull = null;
+  if (isrc) {
+    deezerFull = await new Promise(resolve => {
+      chrome.runtime.sendMessage({ type: "DEBUG_DEEZER_FULL", isrc }, resolve);
+    });
+  }
+  console.log("[TS DEBUG] Deezer (track + artist + artistTop + artistRelated + album):", deezerFull);
+
+  let mbFull = null;
+  if (isrc) {
+    mbFull = await new Promise(resolve => {
+      chrome.runtime.sendMessage({ type: "DEBUG_MB_FULL", isrc }, resolve);
+    });
+  }
+  console.log("[TS DEBUG] MusicBrainz (full w/ genres+tags+releases):", mbFull);
+
+  console.log("[TS DEBUG] ===== End dump — expand each object above to browse fields =====");
+  return { apple: appleFull, deezer: deezerFull, musicbrainz: mbFull, musickit: nowPlaying };
+}
+window.tsDump = dumpNowPlayingFull;
+
 // --- Popup messages ---
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === "TOGGLE_INTERCEPT") {
     intercepting = message.enabled;
     log(`[TS] Interception ${intercepting ? "on" : "off"}`);
+  }
+  if (message.type === "DEBUG_DUMP_TRACK") {
+    dumpNowPlayingFull().then(sendResponse);
+    return true;
   }
   if (message.type === "GET_PROFILE") {
     const nowPlaying = recentTracks[recentTracks.length - 1];

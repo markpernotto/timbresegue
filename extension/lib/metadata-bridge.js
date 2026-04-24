@@ -107,6 +107,51 @@ async function searchDeezerByBPMWide(bpmMin, bpmMax, limit = 25) {
     }));
 }
 
+// Fetch top tracks from artists Deezer considers similar to the seed.
+// This is the big variety lever — one seed artist's `/related` returns up to 20 similar
+// artists; we pick the top `artistLimit` and fetch `tracksPerArtist` top tracks each.
+// The resulting tracks still flow through the scorer, so BPM/era/genre gates still apply.
+async function getDeezerSimilarArtistTracks(artistDeezerId, artistLimit = 3, tracksPerArtist = 8) {
+  const relRes  = await fetch(`${DEEZER_BASE}/artist/${artistDeezerId}/related?limit=${artistLimit}`);
+  const relData = await relRes.json();
+  const related = relData.data ?? [];
+  if (!related.length) return [];
+
+  const topLists = await Promise.all(
+    related.map(a =>
+      fetch(`${DEEZER_BASE}/artist/${a.id}/top?limit=${tracksPerArtist}`)
+        .then(r => r.json())
+        .then(d => (d.data ?? []).map(t => ({ ...t, _seedArtistName: a.name, _seedArtistId: a.id })))
+        .catch(() => [])
+    )
+  );
+
+  // Deezer's /artist/{id}/top response omits ISRC — have to fetch each track individually
+  // to pick it up. Cap total enrichment to keep the latency reasonable.
+  const flat     = topLists.flat().slice(0, 24);
+  const enriched = await Promise.all(flat.map(async t => {
+    if (t.isrc) return t;
+    try {
+      const r = await fetch(`${DEEZER_BASE}/track/${t.id}`);
+      const d = await r.json();
+      if (d.error) return null;
+      return { ...t, isrc: d.isrc, bpm: d.bpm ?? t.bpm };
+    } catch { return null; }
+  }));
+
+  return enriched
+    .filter(t => t?.isrc)
+    .map(t => ({
+      title:          t.title,
+      artist:         t.artist?.name ?? t._seedArtistName,
+      artistDeezerId: t._seedArtistId,
+      isrc:           t.isrc,
+      deezerId:       t.id,
+      bpm:            t.bpm ?? null,
+      duration:       t.duration,
+    }));
+}
+
 // Search Deezer for an artist by name, return their Deezer ID.
 async function searchDeezerArtist(name) {
   const q   = encodeURIComponent(name);
@@ -140,4 +185,31 @@ async function getMusicBrainzFirstRelease(isrc) {
   return date;
 }
 
-export { getDeezerTrackByISRC, getDeezerRadio, searchDeezerByBPM, searchDeezerByBPMWide, searchDeezerArtist, getMusicBrainzFirstRelease };
+// --- Debug probes: return the full raw JSON so we can inspect every available field.
+
+async function debugDeezerFull(isrc) {
+  const trackRes = await fetch(`${DEEZER_BASE}/track/isrc:${isrc}`);
+  const track    = await trackRes.json();
+  if (track.error) return { error: track.error };
+
+  const [artist, artistTop, artistRelated, album] = await Promise.all([
+    track.artist?.id   ? fetch(`${DEEZER_BASE}/artist/${track.artist.id}`).then(r => r.json())            : null,
+    track.artist?.id   ? fetch(`${DEEZER_BASE}/artist/${track.artist.id}/top?limit=5`).then(r => r.json()) : null,
+    track.artist?.id   ? fetch(`${DEEZER_BASE}/artist/${track.artist.id}/related?limit=5`).then(r => r.json()) : null,
+    track.album?.id    ? fetch(`${DEEZER_BASE}/album/${track.album.id}`).then(r => r.json())              : null,
+  ]);
+  return { track, artist, artistTop, artistRelated, album };
+}
+
+async function debugMusicBrainzFull(isrc) {
+  // Minimal, universally-supported inc params for ISRC lookups. Some ISRCs 400 on ratings or
+  // releases combos, so stick to the reliable trio.
+  const url = `https://musicbrainz.org/ws/2/isrc/${isrc}?inc=artists+genres+tags&fmt=json`;
+  const res = await fetch(url, {
+    headers: { "User-Agent": "Timbre-Segue/0.1 (safari-extension; https://github.com/markpernotto/timbresegue)" },
+  });
+  if (!res.ok) return { error: `HTTP ${res.status}`, url };
+  return await res.json();
+}
+
+export { getDeezerTrackByISRC, getDeezerRadio, getDeezerSimilarArtistTracks, searchDeezerByBPM, searchDeezerByBPMWide, searchDeezerArtist, getMusicBrainzFirstRelease, debugDeezerFull, debugMusicBrainzFull };

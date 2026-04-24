@@ -11,6 +11,25 @@
 
   const PREFIX = "AML_";
 
+  // Debug helper exposed on the page's main-world window so it's reachable from
+  // Safari's DevTools console (content-script globals live in an isolated sandbox).
+  window.tsDump = function tsDump() {
+    return new Promise(resolve => {
+      const id = Math.random().toString(36).slice(2);
+      const handler = ev => {
+        if (ev.source !== window || ev.data?.type !== `${PREFIX}DEBUG_DUMP_REPLY` || ev.data.id !== id) return;
+        window.removeEventListener("message", handler);
+        console.log("[TS DEBUG] MusicKit  :", ev.data.result?.musickit);
+        console.log("[TS DEBUG] Apple full:", ev.data.result?.apple);
+        console.log("[TS DEBUG] Deezer    :", ev.data.result?.deezer);
+        console.log("[TS DEBUG] MB full   :", ev.data.result?.musicbrainz);
+        resolve(ev.data.result);
+      };
+      window.addEventListener("message", handler);
+      window.postMessage({ type: `${PREFIX}DEBUG_DUMP`, id }, "*");
+    });
+  };
+
   function getMK() {
     return typeof MusicKit !== "undefined" ? MusicKit.getInstance() : null;
   }

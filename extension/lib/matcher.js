@@ -97,7 +97,10 @@ const GENRE_CORE = {
   "electronic":   ["electronic", "electronica", "synth-pop", "idm", "downtempo", "ambient"],
   "dance":        ["dance", "house", "edm", "electronic", "electronica"],
   "house":        ["house", "deep house", "tech house", "electronic", "dance"],
-  "techno":       ["techno", "electronic", "electronica", "industrial", "dance", "house", "edm"],
+  // Most techno on Apple Music is tagged only "Electronic" or "Dance" (Bicep, Moby, Prodigy).
+  // Keep the broad aliases in so the pool doesn't starve; wrong-genre crossover is handled
+  // separately by GENRE_EXCLUDE below (synth-pop, electropop, etc. hard-rejected).
+  "techno":       ["techno", "tech house", "minimal techno", "industrial techno", "deep techno", "acid techno", "electronic", "electronica", "dance", "edm", "house", "industrial"],
   "pop":          ["pop", "pop/rock", "synth-pop", "teen pop", "k-pop", "j-pop", "electropop"],
   "hip-hop/rap":  ["hip-hop/rap", "hip-hop", "rap", "trap", "underground rap", "gangsta rap", "west coast rap", "east coast rap", "old school rap", "conscious rap", "hardcore rap", "southern rap", "crunk", "bounce"],
   "r&b/soul":     ["r&b/soul", "r&b", "soul", "neo-soul", "contemporary r&b", "motown"],
@@ -113,14 +116,38 @@ const GENRE_CORE = {
   "singer/songwriter": ["singer/songwriter", "folk", "contemporary folk", "americana"],
   "funk":         ["funk", "r&b/soul", "soul", "disco"],
   "k-pop":        ["k-pop", "korean pop", "j-pop"],
-  // Apple Music has no standalone Disco genre — disco tracks are tagged "Dance".
-  // "funk" included because many classic disco tracks carry that tag too.
-  "disco":        ["disco", "dance", "funk"],
+  // Apple Music has no dedicated Disco tag — 70s disco classics are tagged "Pop",
+  // "R&B/Soul", "Dance", or "Funk" depending on the track. Cast wide; GENRE_EXCLUDE
+  // below keeps out modern pop/hip-hop crossovers.
+  "disco":        ["disco", "dance", "funk", "pop", "r&b/soul", "soul", "pop/rock"],
 };
 
 function expandGenreCore(genre) {
   const key = genre.toLowerCase();
   return GENRE_CORE[key] ?? GENRE_ALIASES[key] ?? [key];
+}
+
+// Genre-specific hard exclusions — used to filter out crossover tags that would otherwise
+// pass through broad CORE aliases (e.g. a synth-pop track carrying "Electronic" would score
+// as Techno without this list). Applied only when the forced genre matches a key here.
+const GENRE_EXCLUDE = {
+  "techno":      ["synth-pop", "electropop", "teen pop", "k-pop", "j-pop", "chillwave", "lo-fi", "downtempo", "ambient", "adult contemporary", "pop", "easy listening", "new age"],
+  "house":       ["synth-pop", "electropop", "teen pop", "k-pop", "j-pop", "chillwave", "ambient", "new age", "adult contemporary"],
+  "metal":       ["pop", "hip-hop/rap", "rap", "r&b/soul", "country", "latin", "jazz", "classical", "reggae", "electronic", "dance", "disco"],
+  "classical":   ["hip-hop/rap", "rap", "rock", "metal", "pop/rock", "country", "disco", "dance", "reggae", "punk"],
+  "jazz":        ["hip-hop/rap", "rap", "metal", "electronic", "dance", "disco", "country", "k-pop"],
+  "country":     ["hip-hop/rap", "rap", "metal", "electronic", "dance", "techno", "house", "reggae", "k-pop", "latin"],
+  "hip-hop/rap": ["classical", "country", "metal", "reggae", "jazz", "blues", "folk"],
+  "reggae":      ["metal", "classical", "country", "hip-hop/rap", "rap", "k-pop"],
+  "folk":        ["hip-hop/rap", "rap", "metal", "electronic", "dance", "techno", "k-pop", "reggaeton"],
+  // Disco's CORE is deliberately wide (pop/R&B are common tags on 70s disco). The job of
+  // EXCLUDE here is to reject anything unmistakably NOT disco: rap, metal, country, reggae,
+  // k-pop, modern genres. Era-filtering handles modern pop naturally.
+  "disco":       ["hip-hop/rap", "rap", "metal", "country", "reggae", "k-pop", "classical", "jazz/blues", "singer/songwriter", "folk", "latin", "urbano latino", "reggaeton"],
+};
+
+function excludedGenresFor(genre) {
+  return GENRE_EXCLUDE[genre.toLowerCase()] ?? [];
 }
 
 // Score a candidate Apple Music track against a vibe profile.
@@ -155,7 +182,23 @@ function scoreCandidate(candidate, profile, alreadyQueued = new Set()) {
     ? (GENRE_CORE[primaryForScoring] ?? GENRE_ALIASES[primaryForScoring] ?? [primaryForScoring])
     : profile.genres.flatMap(g => expandGenre(g));
   const overlap = candidateGenres.filter(g => scoringAliases.includes(g)).length;
+
+  // Hard-exclude candidates with genre data that doesn't overlap at all with the primary.
+  // Without this, threshold relaxation lets wrong-genre tracks pass on era or BPM alone
+  // (e.g. La Bouche queued in a Metal session on era match alone). Only applies when we
+  // have a known primary AND the candidate reports any genres — unknown-genre tracks still
+  // get the benefit of the doubt.
+  if (primaryForScoring && candidateGenres.length > 0 && overlap === 0) return -1;
+
   score += overlap > 0 ? WEIGHTS.genre : 0;
+
+  // Bonus for candidates whose tags include the primary genre name verbatim.
+  // Example: in a Disco session, a track tagged "Disco" outranks one tagged only "Pop".
+  // Lets tag-authentic tracks (Candi Staton, Earth Wind & Fire, O'Jays) rise above
+  // era-adjacent crossovers (modern pop that happens to sit in the Disco alias set).
+  if (primaryForScoring && candidateGenres.includes(primaryForScoring)) {
+    score += 2;
+  }
 
   // When a genre is explicitly forced, require overlap with the *core* (tight) alias set —
   // not the full scoring aliases, which are too broad (e.g. "dance" matching non-disco tracks).
@@ -163,6 +206,11 @@ function scoreCandidate(candidate, profile, alreadyQueued = new Set()) {
     const coreAliases = expandGenreCore(profile.forcedGenre);
     const forcedOverlap = candidateGenres.filter(g => coreAliases.includes(g)).length;
     if (forcedOverlap === 0) return -1;
+
+    // Hard-reject crossover genres that would otherwise ride through on a broad alias match
+    // (e.g. "Electronic"-tagged synth-pop hitting the Techno alias list).
+    const excludes = excludedGenresFor(profile.forcedGenre);
+    if (excludes.length && candidateGenres.some(g => excludes.includes(g))) return -1;
 
     // Ambient tracks are sleep/drone/nature sounds — never appropriate for rhythmic
     // dance genres even if they carry a broad "Electronic" tag (which is in the core
@@ -173,7 +221,10 @@ function scoreCandidate(candidate, profile, alreadyQueued = new Set()) {
     }
   }
 
-  // Era match
+  // Era match — when the user has locked a decade, era weight is bumped to 3 so an
+  // era-authentic candidate outranks a wrong-era genre match (prevents 2020s tracks from
+  // winning a Disco-70s session just because they carry a "Dance" tag).
+  const eraWeightForced = WEIGHTS.era + 1;
   if (candidate.releaseDate) {
     const candidateYear    = new Date(candidate.releaseDate).getFullYear();
     const candidateDecade  = Math.floor(candidateYear / 10) * 10;
@@ -181,11 +232,11 @@ function scoreCandidate(candidate, profile, alreadyQueued = new Set()) {
     if (profile.forcedDecade === "pre1960") {
       // Special sentinel: accept any track before 1960, no specific decade required
       if (candidateYear >= 1960) return -1;
-      score += WEIGHTS.era;
+      score += eraWeightForced;
     } else if (profile.forcedDecade && profile.dominantDecade) {
       // Locked to a specific decade — hard-exclude anything else
       if (candidateDecade !== profile.dominantDecade) return -1;
-      score += WEIGHTS.era;
+      score += eraWeightForced;
     } else if (profile.dominantDecade) {
       // Auto era — reward proximity, penalise large gaps.
       // Without a penalty, genre alone (3 pts) passes the threshold even for tracks

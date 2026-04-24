@@ -1,7 +1,7 @@
 // service-worker.js
 // Handles Deezer API calls (CORS-exempt in background context).
 
-import { getDeezerTrackByISRC, getDeezerRadio, searchDeezerByBPM, searchDeezerByBPMWide, searchDeezerArtist, getMusicBrainzFirstRelease } from "../lib/metadata-bridge.js";
+import { getDeezerTrackByISRC, getDeezerRadio, getDeezerSimilarArtistTracks, searchDeezerByBPM, searchDeezerByBPMWide, searchDeezerArtist, getMusicBrainzFirstRelease, debugDeezerFull, debugMusicBrainzFull } from "../lib/metadata-bridge.js";
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", () => self.clients.claim());
@@ -22,6 +22,9 @@ async function handleMessage(message) {
     case "GET_RADIO":
       return getDeezerRadio(message.artistDeezerId, message.limit ?? 25);
 
+    case "GET_SIMILAR_ARTIST_TRACKS":
+      return getDeezerSimilarArtistTracks(message.artistDeezerId, message.artistLimit ?? 3, message.tracksPerArtist ?? 8);
+
     case "GET_BPM_SEARCH":
       return searchDeezerByBPM(message.bpmMin, message.bpmMax, message.limit ?? 25, message.genre ?? null);
 
@@ -33,6 +36,12 @@ async function handleMessage(message) {
 
     case "GET_MB_FIRST_RELEASE":
       return getMusicBrainzFirstRelease(message.isrc).then(date => ({ date }));
+
+    case "DEBUG_DEEZER_FULL":
+      return debugDeezerFull(message.isrc);
+
+    case "DEBUG_MB_FULL":
+      return debugMusicBrainzFull(message.isrc);
 
     default:
       return { ok: true };
